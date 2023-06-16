@@ -24,7 +24,7 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = ["ROLE_ADMIN"];
+    private array $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
