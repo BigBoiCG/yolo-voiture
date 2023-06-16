@@ -71,7 +71,7 @@ class AppController extends AbstractController
     public function userEditCommandes($id, $order, CommandeRepository $commandeRepo, MembreRepository $membreRepo, Request $request, EntityManagerInterface $manager): Response
     {   
         $idMembre = $membreRepo->findOneBy(['id' => $id]);
-        $commandes = $commandeRepo->findBy(['id_membre' => $idMembre], ['date_enregistrement' => 'DESC']);
+        $commandes = $commandeRepo->findBy(['id_membre' => $idMembre], ['date_heure_depart' => 'DESC']);
         $commande = $commandeRepo->findOneBy(['id' => $order]);
         $form = $this->createForm(CommandeType::class, $commande);
         $form->handleRequest($request);
@@ -104,7 +104,7 @@ class AppController extends AbstractController
     public function profilCommandes(Membre $membre, CommandeRepository $repo, Request $request, EntityManagerInterface $manager): Response
     {   
         $idMembre = strval($membre->getId());
-        $commandes = $repo->findBy(['id_membre' => $idMembre], ['date_enregistrement' => 'DESC']);
+        $commandes = $repo->findBy(['id_membre' => $idMembre], ['date_heure_depart' => 'DESC']);
 
         return $this->render('app/profile.html.twig', [
             'commandes' => $commandes,

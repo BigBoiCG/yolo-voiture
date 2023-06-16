@@ -2,12 +2,14 @@
 
 namespace App\Form;
 
+use DateTime;
 use App\Entity\Commande;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class CommandeType extends AbstractType
 {
@@ -15,12 +17,19 @@ class CommandeType extends AbstractType
     {
         $builder
             ->add('date_heure_depart', DateType::class, [
-                'years' => range(2023, 2026),
-                'format' => 'd M y'
+                'widget' => 'single_text',
+                'attr' => [
+                    'min' => date_format(new \DateTime('+ 1 days'), "d M y")
+                ],
             ])
             ->add('date_heure_fin', DateType::class, [
-                'years' => range(2023, 2026),
-                'format' => 'd M y'
+                'widget' => 'single_text',
+                'attr' => [
+                    'min' => date_format(new \DateTime('+ 2 days'), "d M y")
+                ],
+                'constraints' => [
+                    new GreaterThanOrEqual(['propertyPath' => 'parent.all[date_heure_depart].data',
+                    'message' => 'La date de fin doit être ultérieure à la date de réservation d\'au moins 1 jour']),],
             ])
             // ->add('prix_total')
             // ->add('date_enregistrement')

@@ -10,9 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: MembreRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Un compte est déjà lié à cet adresse email')]
 class Membre implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,6 +23,11 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message:"Ce champ ne peut pas être vide")]
+    #[Assert\Regex(
+        pattern: "/(\w+\.?|-?\w+?)+@\w+\.?-?\w+?(\.\w{2,3})+/",
+        message: "Merci d'entrer une adresse email valide"
+    )]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -33,12 +40,15 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message:"Ce champ ne peut pas être vide")]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message:"Ce champ ne peut pas être vide")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message:"Ce champ ne peut pas être vide")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 20)]
