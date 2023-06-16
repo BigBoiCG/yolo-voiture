@@ -1,0 +1,76 @@
+création du dépot git
+
+git init
+git add .
+git commit -m "first commit"
+git remote add origin lienGitRepo
+git push  ou git push --set-upstream origin master
+
+avant de continuer il faut modifier notre application avant la mise en ligne
+
+tout d'abord il faut créer le htaccess qui permet de modifier l'url en ligne :
+
+- composer require symfony/apache-pack 
+
+vérifier alors que votre htaccess est bien dans le dossier public
+
+créer un fichier Procfile a la racine et y mettre cette ligne :
+
+postdeploy: php bin/console doctrine:migrations:migrate
+
+maintenant les configurations de notre app son faite plus qu'a re push
+
+git add .
+git commit -m "modification pour la mise en ligne"
+git push
+
+maintenant allons sur https://dashboard.scalingo.com/
+
+
+create new app 
+
+lui donner un nom et appuyer sur créer
+
+choisir de push par git (relier et accepter scalingo a accèder a git si ce n'est pas fait)
+
+aller dans ressource et cliquer sur add an addon
+
+selectionner MySql et choisissez la version free a 0€
+
+attendre que la config se finisse
+
+maintenant aller dans environnement
+
+cliquer sur new variable
+
+name : APP_ENV value: prod
+
+aller maintenant dans Deploy/configuration
+
+selectionner GitHub et cliquer sur Link repo et selectionner votre depot et branch master
+
+aller dans manual deployement et trigger deployment
+
+aller dans resources
+
+
+https://doc.scalingo.com/platform/cli/start
+
+export PATH=$PATH:/c/Program\ Files/  
+
+scalingo
+
+scalingo env | grep SCALINGO_MYSQL_URL=mysql://test_doranc_9934:TnG1xx30HfIt-kS78F_J@b2bc3edf-6440-4d33-b20a-cdd21b8b3c9f.test-doranc-9934.mysql.a.osc-fr1.scalingo-dbs.com:31955/test_doranc_9934?useSSL=true&verifyServerCertificate=false
+
+connection user/password
+
+scalingo apps
+
+scalingo --app test-doranco-app mysql-console
+
+select * from user;
+
+update user set roles='["ROLE_ADMIN"]' WHERE id=1;
+
+
+

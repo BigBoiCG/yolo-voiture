@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des commandes{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<h1 class="text-center mt-4">Gestion des commandes</h1>
+    <table class="table table-primary">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Membre</th>
+                <th>Véhicule</th>
+                <th>Heure de début</th>
+                <th>Heure de fin</th>
+                <th>Prix total</th>
+                <th>Date de la réservation</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in commandes %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.idMembre.pseudo }}</td>
+                    <td>{{ item.idVehicule.titre }}</td>
+                    <td>{{ item.dateHeureDepart|date('d/m/Y, H:i:s')}}</td>
+                    <td>{{ item.dateHeureFin|date('d/m/Y, H:i:s')}}</td>
+                    <td>{{ item.prixTotal}}</td>
+                    <td>{{ item.dateEnregistrement|date('d/m/Y, H:i:s') }}</td>
+                    <td>      
+                        {# <a href="{{ path('admin_commande_edit', {id: item.id}) }}" class="text-warning"><i class="fas fa-edit"></i></a> #}
+                        <a href="{{ path('admin_delete_commande', {id: item.id}) }}" class="text-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{# {% if editMode %}
+<h2 class="text-center mt-4">Modifier la commande</h2>
+{% else %}
+<h2 class="text-center mt-4">Ajouter une commande</h2>
+{% endif %}
+
+<div class="container">
+{{form_start(formAdminCommand, {
+        attr: {
+            novalidate: 'novalidate'
+        }
+    }) }}
+
+    {{form_row(formAdminCommand.titre)}}
+    {{form_row(formAdminCommand.marque)}}
+    {{form_row(formAdminCommand.modele)}}
+    {{form_row(formAdminCommand.description)}}
+    {{form_row(formAdminCommand.photo)}}
+    {{form_row(formAdminCommand.prix_journalier)}}
+{% if editMode %}
+    <button type="submit" class="btn btn-info mt-2">Modifier commande</button>
+{% else %}
+    <button type="submit" class="btn btn-info mt-2">Ajouter commande</button>
+{% endif %}
+
+
+{{form_end(formAdminCommand)}}
+</div> #}
+
+
+
+{% endblock %}

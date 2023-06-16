@@ -1,0 +1,51 @@
+Cours du 12/06 :
+- demoBlog : créer la BDD avec d:d:c, supprimer l'ancien fichier de migration, puis migrer make:migration et d:m:m
+- cf src/DataFixtures/AppFixtures.php juste pour la syntaxe ; doctrine:fixture:load (ou d:f:l) pour générer les fixtures
+- C U M
+- make:entity Categorie ; crée le fichier Entity et le fichier Repository qui contient les requêtes (findAll, findById ...) et le manager
+    - colonnes de la table : title (string - 255 - pas nullable) / description (text - nullable) / articles (relation - Article - OneToMany - Categorie - non nullable - non à la suppression d'orphelins ; aide à lier les deux tables, le wizard explique tout) 
+    - créée tout dans l'ORM, reste à faire les migration ; effacer les fixtures avant pour éviter les erreurs
+- make:entity Comment ; author (string - 255 - non nullable) / content (text - non nullable) / createdAt (datetime - non nullable) / article (relation - Article - ManyToOne - non nullable - suppression d'orphelins autorisée brrt brrt ; au singulier ici alors qu'au pluriel plus haut puisque one to one plutôt que one to many) ; migration puis dmm
+- "il faut répondre aux bonnes questions du sorcier" - Vincent
+- toutes les relations créées le sont dans l'ORM, mais pas dans la BDD ; elles permettent d'accéder à une table via une autre sans création de foregin keys ou de tables de correspondance en BDD, ni de requêtes join en PHP
+- configuration de nouvelles fixtures dans AppFixture pour les catégories ; déplacer le for de l'article dans le for de categorie, y rajouter un setCategorie ; faire le for du comment entre les accolades du for de catégorie
+- modifs sur blog (item.categorie.title)
+- modifs sur show (nouvelle div container)
+- modifs du ArticleType (rajout du champ pour modifier la catégorie)
+- modif du form.html (le champ s'affiche sous le bouton submit sinon)
+- config/packages/security.yaml = gère de base une partie des rôles admins/user
+- make:user - User - yes - email : façon rapide de créer un user ; entraîne des modifs du security.yaml, crée une Entity User 
+- make:entity User : User étant déjà créé, cela nous permet simplement d'ajouter de nouvelles propriétés
+    - on rajoute firstname(string - 255 - non nullable) / lastname (string - 255 - non nullable) / username (string - 255 - non nullable)
+- make:registration-form : permet de créer automatiquement un formulaire d'inscription spécifique ; techniquement, un form classique fonctionnerait, mais là, c'est vraiment fait pour ça
+    - questions subsidiaires : yes (attribut unique empêchant de créer 2 comptes avec le même email) - no (pas de vérification de l'e-mail puisque pas de mailer en place) - no (pas de connexion automatique après l'inscription) - 13 (choix de la route de redirection ; ici, 13 pour rediriger vers home)
+    - valider cette création de form créée un form builder, un controller et une page de vue. 
+    - Formulaire de base : juste un agree terms et un champ password sans vérification, donc modif dans le RegistrationFormType (PasswordType -> RepeatedType, modification des messages, Regex dans les contraintes) et dans le form (remettre les champs, modifier les labels par défaut)
+- Vincent nous donne des tips pour craquer n'importe quel mot de passe (de moins de 8 caractères)
+- make:auth pour gérer l'authentification ; autres questions : 1 (identification sous forme de form) - LoginFormAuthenticator (pour pouvoir s'y retrouver et ne pas avoir le nom par défaut) - SecurityController (controller utilisé pour les routes) - yes (création d'une URL de logout)
+    - créée le SecurityController et un template Login et modifie le security.yaml
+    - sur LoginFormAuthenticator, commenter ligne 51, décommenter la 50, modifier la some_route
+- conditonner l'apparition des boutons à if app.user / else (app.user = fait qu'un utilisateur soit connecté)
+- make:controller Admin : création d'un controller spécifique pour gérer tout ce qui va être rôle admin & backend
+    - suppression du tableau de données dans la méthode de AdminController, modification de la page index.html du dossier admin
+- is_granted(ROLE_ADMIN) : fonction qui permet de cacher un truc si la personne connectée n'est pas admin ; n'empêche pas la récupération via URL directe
+    - pour l'instant, on doit donner à la main le rôle ["ROLE_ADMIN"] à un des comptes pour pouvoir contrôler
+    - définition de la role_hierarchy dans security.yaml pour définir les autorisations et quels rôles peuvent accéder à quels autres
+        - /!\ BIEN METTRE LA TABULATION AVANT role_hierarchy, SINON NE MARCHE PAS
+    - décommentage du path admin (ligne 35) dans le security.yaml pour restreindre l'accès aux pages avec admin dans l'URL à ceux ayant le rôle admin
+    - access_denied_url: permet de renvoyer l'utilisateur en cas d'échec de connexion ; on renvoie sur l'index pour ne pas indiquer que l'adresse est accessible avec une autre connexion
+
+---
+
+Cours du 13/06 :
+- "si vous savez ce que vous voulez, c'est facile de trouver une relation" - Vincent, philosophe de l'amour
+- make:entity Comment, ajout d'une propriété user qui fait la relation entre commentaire et users (user - relation - User - ManyToOne - non nullable - yes - yes)
+- make:form CommentType : création d'un formulaire de création de commentaire
+    - modif de show.html
+    - modif de l'AppController sur la route de show
+- création d'une page Gestion dans Admin, création de route dans AdminController
+- pro tip : dd() = le die var dump classique
+- attention à ne pas donner deux fois le même name à ses routes (bien joué monsieur le débilos)
+- le placeholder est stocké dans les attributs
+- bien penser à mettre le type submit dans les boutons
+- les requêtes de type insert/delete sont gérés par le manager (EntityManagerInterface), les requêtes de type get/find sont gérés par le Repository

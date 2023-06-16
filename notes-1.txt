@@ -1,0 +1,59 @@
+Installation : Composer / Symfony CLI - Binary - Amd 64
+
+Cours de Didier, 05/06 :
+- Installer extens Twig Language 2
+- Routes gérées directement au niveau des controllers (avec 
+)
+    1er argument (obligatoire) : fichier utilisé pour l'affichage, toujours à partir du dossier template
+    2ème argument (optionnel) : type array, contient les éventuelles valeurs paramétrables de l'affichage (cf exemple index.html.twig)
+- Paramètres : include languages (twig - html) pour avoir les raccourcis en twig
+- this->render = include VIEWS
+- nécessaire de faire des returns dans les méthodes du controller sinon ça marche pas
+- extends sur les docs twig = équivalent du requireonce (cf base.html.twig) mais paramétrables ; par contre, pas possible de mettre du contenu hors des blocks dès lors qu'on hérite, pas possible non plus de créer des blocks dans les fichiers enfants
+    Intérêt : header et footer inclus dans la base, paramétrable selon les besoins
+- blocks : espaces définis dans le fichier twig de base, et qu'on modifie dans les fichiers ultérieurs (index.html)
+- possibilité d'effacer le contenu d'un block dans l'enfant en le remplaçant par du contenu vide
+- possibilité aussi de paramétrer des valeurs dans le html, qu'on définira ensuite dans le render du controller (cf salut.html)
+- possibilité de faire des boucles et des calculs directement dans twig
+- possibilité de mettre des paramètres directement dans l'URL (cf calculDynamique dans le controller) ; si on fait ça, les paramètres dans la fonction et dans l'URL doivent avoir exactement le même nom ; possibilité aussi de typer ces données ou de les contrôler via des regex
+- pro tip : Ctrl + F avec regex
+
+---
+
+Cours de Vincent, 06/06 :
+- ORM : Object Relational Mapping, permet de simuler une base de données, fait gagner du temps, évite de faire plein de requêtes pour avoir les éléments à disposition
+- Ouvrir un serveur local via les commandes : symfony server:start -d / php -S localhost:8000 -t public (la commande avec PHP permet de choisir quel port on ouvre, plutôt que de faire attention à ce que nous ressort la console)
+- Créer un controller créée le fichier de controller dans Controllers, plus un dossier dans Templates avec un premier fichier html, avec un fichier base et une route initiale qui pointe 
+ - Le name servira comme adresse pour les liens qu'on mettra dans le HTML
+ - Installer extens DotEnv (celle de mikestead, pas l'officielle, qui est "pas ouf, on s'en fout" dixit Vincent) & PHP NameSpace Resolver
+ - si this->render = include VIEWS, this->redirectToRoute = header location
+ - Création de la page d'accueil home (route '/') + if
+ - Database : modifier la Database_URL dans .env (la bonne ligne)
+ - taper php bin/console ou symfony = la même chose
+ - créer la database via php bin/console doctrine:database:create
+ - Entities = classes (donc majuscule dans les noms) qui correspondent aux tables de la BDD
+ - créer les Entities avec make:entity NomDeClasse ; on doit ensuite entrer le nom de la première propriété, l'ID étant créé automatiquement
+ - Les tables créées le sont dans l'ORM (et dans le fichier Entity, avec directement getter/setter) mais pas directement dans la database ; il faut donc faire un make:migration (crée le fichier de migration), puis doctrine:migrations:migrate/d:m:m (envoie la migration vers la BDD) pour les créer "vraiment"
+ - créer une Entité crée un fichier dans Entity mais aussi des Repository, avec un fichier qui regroupe toutes les requêtes pour aller chercher des trucs en BDD
+ - composer require orm-fixtures : sert à créer des fixtures, c'est-à-dire générer du contenu artificiellement en BDD ; bien penser à apporter les classes pour créer une nouvelle fixture
+ - utilisation des fonctions du Repository : cf controller pour index
+ - boucles en twig : cf index.html
+ - trouver un truc par id et afficher les infos : vue dans TestController + page vue
+ - lien dans index.html vers les articles (path('name'))
+ - possible de mettre des balises dans les données de base et de les afficher avec twig si on l'écrit comme ça : donnée|raw
+ - formulaire : faisable par commande (make:form EntitéType)
+    . crée un fichier dans le dossier Form, avec un builder qui crée le formulaire
+    . si on lie au bon truc, récupère tous les champs sauf id ; donc bien penser à retirer ceux dont on n'a pas besoin (ex : date)
+    . méthode createForm + renderForm dans le controller
+    . modif des thèmes dans config/packages/twig.yaml
+    . problème d'appeler le form direct dans le twig : pas beaucoup de latitude de modification en termes de style ; solution : afficher avec form_start/form_end/form_row
+- dump = var_dump / dd = die var_dump
+- J'ai un peu décroché sur la fin du form
+
+--- 
+
+Cours du 08/06 (8.6 l'alcool excellent mdrrrrrr)
+- doctrine : en commande, nom de l'ORM de Symfony
+- doctrine:database:create / d:d:c = commande pour créer une database ; à faire après avoir configuré quelle database on utilise dans le .env
+- si plusieurs entités créées d'un coup, on peut ne faire qu'un seul make:migration et d:m:m pour le tout
+- abandon d'Heroku pour la mise en ligne (parce que racket de 7 balles) ; potentiellement Webhostapp

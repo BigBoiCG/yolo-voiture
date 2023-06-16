@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des véhicules{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<h1 class="text-center mt-4">Gestion des véhicules</h1>
+    <table class="table table-primary">
+        <thead>
+            <tr>
+            {% for colonne in colonnes %}
+                <th>{{ colonne }}</th>
+            {% endfor %}
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in vehicules %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.titre }}</td>
+                    <td>{{ item.marque }}</td>
+                    <td>{{ item.modele}}</td>
+                    <td>{{ item.description}}</td>
+                    <td>{{ item.photo}}</td>
+                    <td>{{ item.prixJournalier}}</td>
+                    <td>{{ item.dateEnregistrement|date('d/m/Y, H:i:s') }}</td>
+                    <td>
+                        
+                        <a href="{{ path('vehicule_edit', {id: item.id}) }}" class="text-warning"><i class="fas fa-edit"></i></a>
+                        <a href="{{ path('delete_vehicule', {id: item.id}) }}" class="text-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if editMode %}
+<h2 class="text-center mt-4">Modifier le véhicule</h2>
+{% else %}
+<h2 class="text-center mt-4">Ajouter un véhicule</h2>
+{% endif %}
+
+<div class="container">
+{{form_start(formVehicule, {
+        attr: {
+            novalidate: 'novalidate'
+        }
+    }) }}
+
+    {{form_row(formVehicule.titre)}}
+    {{form_row(formVehicule.marque)}}
+    {{form_row(formVehicule.modele)}}
+    {{form_row(formVehicule.description)}}
+    {{form_row(formVehicule.photo)}}
+    {{form_row(formVehicule.prix_journalier)}}
+{% if editMode %}
+    <button type="submit" class="btn btn-info mt-2">Modifier véhicule</button>
+{% else %}
+    <button type="submit" class="btn btn-info mt-2">Ajouter véhicule</button>
+{% endif %}
+
+
+{{form_end(formVehicule)}}
+</div>
+
+
+
+{% endblock %}

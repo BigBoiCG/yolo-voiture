@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes réservations{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<h1 class="text-center mt-4">Mes réservations</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date de la réservation</th>
+                <th>Véhicule</th>
+                <th>Début réservation</th>
+                <th>Fin réservation</th>
+                <th>Prix total</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in commandes %}
+                <tr>
+                    <td>{{ item.dateEnregistrement|date('d/m/Y, H:i:s') }}</td>
+                    <td>{{ item.idVehicule.titre }}</td>
+                    <td>{{ item.dateHeureDepart|date('d/m/Y, H:i:s') }}</td>
+                    <td>{{ item.dateHeureFin|date('d/m/Y, H:i:s')}}</td>
+                    <td>{{ item.prixTotal}}</td>
+                    <td>
+                        <a href="{{ path('user_commande_edit', {id: item.idMembre.id, order: item.id}) }}" class="btn btn-warning">Modifier la réservation</a>
+                        <a href="{{ path('user_delete_commande', {id: item.id}) }}" class="btn btn-danger">Annuler réservation</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if editMode %}
+<div class="container">
+    <h2 class="text-center mt-4">Modifier commande</h2>
+    {{ form_start(editForm) }}
+
+        {{ form_row(editForm.date_heure_depart) }}
+        {{ form_row(editForm.date_heure_fin) }}
+
+    <button class="btn btn-success" type="submit">Enregistrer la commande</button>
+
+    {{ form_end(editForm) }}
+</div>
+{% endif %}
+
+
+
+{% endblock %}

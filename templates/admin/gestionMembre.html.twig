@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des membres{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<h1 class="text-center mt-4">Gestion des membres</h1>
+    <table class="table table-primary">
+        <thead>
+            <tr>
+            {% for colonne in colonnes %}
+                <th>{{ colonne }}</th>
+            {% endfor %}
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in membres %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.roles| join(',') }}</td>
+                    <td>{{ item.password}}</td>
+                    <td>{{ item.pseudo}}</td>
+                    <td>{{ item.nom}}</td>
+                    <td>{{ item.prenom}}</td>
+                    <td>{{ item.civilite}}</td>
+                    <td>{{ item.dateEnregistrement|date('d/m/Y, H:i:s') }}</td>
+                    <td>
+                        
+                        <a href="{{ path('membre_edit', {id: item.id}) }}" class="text-warning"><i class="fas fa-edit"></i></a>
+                        <a href="{{ path('delete_membre', {id: item.id}) }}" class="text-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if editMode %}
+<h2 class="text-center mt-4">Modifier le membre</h2>
+{% else %}
+<h2 class="text-center mt-4">Ajouter un membre</h2>
+{% endif %}
+
+<div class="container">
+{{form_start(formMembre, {
+        attr: {
+            novalidate: 'novalidate'
+        }
+    }) }}
+
+    {{form_row(formMembre.email)}}
+{# champ mot de passe caché en editMode pour qu'on ne puisse pas le modifier, sans que cela ne renvoie un résultat nul non plus #}
+{% if editMode == null %}
+    {{form_row(formMembre.password)}}
+{% else %}
+    <div class="d-none">{{form_row(formMembre.password)}}</div>
+{% endif %}
+    {{form_row(formMembre.pseudo)}}
+    {{form_row(formMembre.nom)}}
+    {{form_row(formMembre.prenom)}}
+    {{form_row(formMembre.civilite)}}
+{% if editMode %}
+    {{form_row(formMembre.roles)}}
+{% else %}
+    <div class="d-none">{{form_row(formMembre.roles)}}</div>  
+{% endif %}
+{% if editMode %}
+    <button type="submit" class="btn btn-info mt-2">Modifier membre</button>
+{% else %}
+    <button type="submit" class="btn btn-info mt-2">Ajouter membre</button>
+{% endif %}
+
+
+{{form_end(formMembre)}}
+</div>
+
+{% endblock %}
+
+ 

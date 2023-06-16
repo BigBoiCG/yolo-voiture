@@ -1,0 +1,23 @@
+DONE :
+- créer tables Vehicule et Membre
+- Gestion véhicules opérationnelle (avec modifs selon si EditMode ou pas)
+- Gestion Membre (avec modifs selon si EditMode ou pas)
+- gérer inscription/connexion/déconnexion
+- créer table Commande (lien avec les 2 autres tables, algo)
+- cartes créées sur la home
+- Créer un bouton view qui mène vers une page de view sur les cards de la home
+- sur la page de view, créer un bouton commande qui génère une commande
+- affichage du compte avec toutes les commandes
+- gestion des rôles (USER/ADMIN), avec changement possible dans la gestion de membres pour l'admin, modification du security.yaml et restriction d'affichage selon le rôle
+- Affichage & modification des rôles dans la Gestion User (cf MembreType et les champs avec le select, et cf gestionMembre pour l'affichage de item.roles)
+- modification des dates des résas par le User
+ 
+
+TO DO :
+- PAS TERMINE : interface Gestion Commandes Admin & User (suppression faite, impossible de faire le formulaire pour AdminCommand)
+- gestion contraintes sur les forms (vérification longueur, contrôle des mdp) -> cf Entités
+
+
+CE QUI DECONNE :
+- gérer multiplication des messages "connexion réussie" sur la base quand on revient de connexion même si connexion pas réussie
+- impossible d'ajouter un membre dans la GestionMembre (ne prend pas la date d'enregistrement)

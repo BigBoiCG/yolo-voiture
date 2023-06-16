@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réserver un véhicule{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center mt-4">Réserver le {{ vehicule.titre }}</h1>
+    {{ form_start(formCommande) }}
+
+        {{ form_row(formCommande.date_heure_depart) }}
+        {{ form_row(formCommande.date_heure_fin) }}
+
+    <button class="btn btn-success" type="submit">Enregistrer la commande</button>
+
+    {{ form_end(formCommande) }}
+</div>
+{% endblock %}
